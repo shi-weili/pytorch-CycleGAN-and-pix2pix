@@ -18,32 +18,40 @@ class SimpleGridDataset(BaseDataset):
     def __getitem__(self, index):
         fname = self.fnames[index]
 
+        w_offset = random.randint(0, max(0, self.opt.loadSize - self.opt.fineSize - 1))
+        h_offset = random.randint(0, max(0, self.opt.loadSize - self.opt.fineSize - 1))
+
         topo = Image.open(os.path.join(self.dir, 'topo', fname))
-        topo = topo.resize((self.opt.fineSize, self.opt.fineSize), Image.LANCZOS)
+        topo = topo.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
         topo = transforms.ToTensor()(topo)
+        topo = topo[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
         topo = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(topo)
 
         land = Image.open(os.path.join(self.dir, 'land', fname))
-        land = land.resize((self.opt.fineSize, self.opt.fineSize), Image.LANCZOS)
+        land = land.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
         land = transforms.ToTensor()(land)
+        land = land[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
         land = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(land)
 
         longi = Image.open(os.path.join(self.dir, 'longi', fname))
-        longi = longi.resize((self.opt.fineSize, self.opt.fineSize), Image.LANCZOS)
+        longi = longi.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
         longi = transforms.ToTensor()(longi).type(torch.FloatTensor) / 64800
+        longi = longi[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
         longi = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(longi)
     
         lati = Image.open(os.path.join(self.dir, 'lati', fname))
-        lati = lati.resize((self.opt.fineSize, self.opt.fineSize), Image.LANCZOS)
+        lati = lati.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
         lati = transforms.ToTensor()(lati).type(torch.FloatTensor) / 64800
+        lati = lati[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
         lati = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(lati)
 
         A = torch.cat((topo, land, longi, lati), dim=0)
 
         if self.opt.phase == 'train':
             bm = Image.open(os.path.join(self.dir, 'bm', fname))
-            bm = bm.resize((self.opt.fineSize, self.opt.fineSize), Image.LANCZOS)
+            bm = bm.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
             bm = transforms.ToTensor()(bm)
+            bm = bm[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
             bm = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(bm)
             B = bm       
 

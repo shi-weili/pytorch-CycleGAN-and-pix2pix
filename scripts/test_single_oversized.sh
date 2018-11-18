@@ -1,0 +1,2 @@
+set -ex
+python test.py --dataroot ./datasets/facades_single/ --name facades_label2photo_pretrained --model test --which_model_netG unet_256 --which_direction BtoA --dataset_mode single --norm batch --loadSize 2048 --fineSize 2048
