@@ -56,7 +56,7 @@ class SimpleGridDataset(BaseDataset):
             B = bm       
 
         else:
-            B = np.zeros_like(topo)   
+            B = np.zeros_like(topo)  
 
         return {'A': A, 'B': B,
                 'A_paths': fname, 'B_paths': fname}
