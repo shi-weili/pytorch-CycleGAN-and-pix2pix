@@ -7,8 +7,7 @@ from data.base_dataset import BaseDataset
 from data.image_folder import make_dataset
 from PIL import Image
 
-
-class SimpleGridDataset(BaseDataset):
+class SimpleGridNoLongiDataset(BaseDataset):
     def initialize(self, opt):
         self.opt = opt
         self.root = opt.dataroot
@@ -33,13 +32,6 @@ class SimpleGridDataset(BaseDataset):
         land = land[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
         land = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(land)
     
-        longi = Image.open(os.path.join(self.dir, 'longi', fname))
-        longi = longi.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-        longi = Image.fromarray((np.asarray(longi) / 257).astype(np.uint8))
-        longi = transforms.ToTensor()(longi)
-        longi = longi[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
-        longi = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(longi)
-            
         lati = Image.open(os.path.join(self.dir, 'lati', fname))
         lati = lati.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
         lati = Image.fromarray((np.asarray(lati) / 257).astype(np.uint8))
@@ -47,7 +39,7 @@ class SimpleGridDataset(BaseDataset):
         lati = lati[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
         lati = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(lati)
 
-        A = torch.cat((topo, land, longi, lati), dim=0)
+        A = torch.cat((topo, land, lati), dim=0)
 
         if self.opt.phase == 'train':
             bm = Image.open(os.path.join(self.dir, 'bm', fname))
@@ -67,4 +59,4 @@ class SimpleGridDataset(BaseDataset):
         return len(self.fnames)
 
     def name(self):
-        return 'SimpleGridDataset'
+        return 'SimpleGridNoLongiDataset'
