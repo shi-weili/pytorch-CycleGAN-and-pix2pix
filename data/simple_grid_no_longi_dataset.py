@@ -34,8 +34,7 @@ class SimpleGridNoLongiDataset(BaseDataset):
     
         lati = Image.open(os.path.join(self.dir, 'lati', fname))
         lati = lati.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-        lati = Image.fromarray((np.asarray(lati) / 257).astype(np.uint8))
-        lati = transforms.ToTensor()(lati)
+        lati = transforms.ToTensor()(lati).type(torch.FloatTensor) / 65535
         lati = lati[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
         lati = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(lati)
 
