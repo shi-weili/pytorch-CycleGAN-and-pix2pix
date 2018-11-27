@@ -24,7 +24,7 @@ class BaseOptions():
         parser.add_argument('--n_layers_D', type=int, default=3, help='only used if which_model_netD==n_layers')
         parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
         parser.add_argument('--name', type=str, default='experiment_name', help='name of the experiment. It decides where to store samples and models')
-        parser.add_argument('--dataset_mode', type=str, default='unaligned', help='chooses how datasets are loaded. [unaligned | aligned | single | simple_grid | simple_grid_clongi | simple_grid_no_longi]')
+        parser.add_argument('--dataset_mode', type=str, default='unaligned', help='chooses how datasets are loaded. [unaligned | aligned | single | simple_grid]')
         parser.add_argument('--model', type=str, default='cycle_gan',
                             help='chooses which model to use. cycle_gan, pix2pix, test')
         parser.add_argument('--which_direction', type=str, default='AtoB', help='AtoB or BtoA')
@@ -44,6 +44,9 @@ class BaseOptions():
         parser.add_argument('--init_gain', type=float, default=0.02, help='scaling factor for normal, xavier and orthogonal.')
         parser.add_argument('--verbose', action='store_true', help='if specified, print more debugging information')
         parser.add_argument('--suffix', default='', type=str, help='customized suffix: opt.name = opt.name + suffix: e.g., {model}_{which_model_netG}_size{loadSize}')
+        # SimpleGridDataset params:
+        parser.add_argument('--topo_filter', type=str, default='none', help='Apply Pillow ImageFilter to elevation data in SimpleGridDataset [none|detail|edge_enhance|edge_enhance_more|sharpen]')
+        parser.add_argument('--longi', type=str, default='cycle', help='Longitude data in SimpleGridDataset [monotone|circular|none]')
         self.initialized = True
         return parser
 

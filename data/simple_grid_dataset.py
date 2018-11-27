@@ -6,7 +6,7 @@ import numpy as np
 from data.base_dataset import BaseDataset
 from data.image_folder import make_dataset
 from PIL import Image
-
+from PIL import ImageFilter
 
 class SimpleGridDataset(BaseDataset):
     def initialize(self, opt):
@@ -23,6 +23,16 @@ class SimpleGridDataset(BaseDataset):
 
         topo = Image.open(os.path.join(self.dir, 'topo', fname))
         topo = topo.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
+
+        if self.opt.topo_filter == 'detail':
+            topo = topo.filter(ImageFilter.DETAIL)
+        elif self.opt.topo_filter == 'edge_enhance':
+            topo = topo.filter(ImageFilter.EDGE_ENHANCE)
+        elif self.opt.topo_filter == 'edge_enhance_more':
+            topo = topo.filter(ImageFilter.EDGE_ENHANCE_MORE)
+        elif self.opt.topo_filter == 'sharpen':
+            topo = topo.filter(ImageFilter.SHARPEN)
+
         topo = transforms.ToTensor()(topo)
         topo = topo[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
         topo = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(topo)
@@ -33,11 +43,19 @@ class SimpleGridDataset(BaseDataset):
         land = land[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
         land = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(land)
     
-        longi = Image.open(os.path.join(self.dir, 'longi', fname))
-        longi = longi.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-        longi = transforms.ToTensor()(longi).type(torch.FloatTensor) / 65535
-        longi = longi[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
-        longi = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(longi)
+        if self.opt.longi == 'monotone':
+            longi = Image.open(os.path.join(self.dir, 'longi', fname))
+            longi = longi.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
+            longi = transforms.ToTensor()(longi).type(torch.FloatTensor) / 65535
+            longi = longi[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
+            longi = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(longi)
+
+        elif self.opt.longi == 'circular':
+            longi = Image.open(os.path.join(self.dir, 'clongi', fname))
+            longi = longi.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
+            longi = transforms.ToTensor()(longi).type(torch.FloatTensor) / 65535
+            longi = longi[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
+            longi = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(longi)
             
         lati = Image.open(os.path.join(self.dir, 'lati', fname))
         lati = lati.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
@@ -45,7 +63,10 @@ class SimpleGridDataset(BaseDataset):
         lati = lati[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
         lati = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(lati)
 
-        A = torch.cat((topo, land, longi, lati), dim=0)
+        if self.opt.longi != 'none':
+            A = torch.cat((topo, land, longi, lati), dim=0)
+        else:
+            A = torch.cat((topo, land, lati), dim=0)
 
         if self.opt.phase == 'train':
             bm = Image.open(os.path.join(self.dir, 'bm', fname))
