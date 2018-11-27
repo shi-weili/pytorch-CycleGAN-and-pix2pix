@@ -12,7 +12,12 @@ class SimpleGridDataset(BaseDataset):
     def initialize(self, opt):
         self.opt = opt
         self.root = opt.dataroot
-        self.dir = os.path.join(opt.dataroot, opt.phase)
+
+        if (opt.multi_phase_dataset):
+            self.dir = os.path.join(opt.dataroot, opt.phase)
+        else:
+            self.dir = opt.dataroot
+
         self.fnames = sorted(make_dataset(os.path.join(self.dir, 'topo'), fnameOnly=True))
 
     def __getitem__(self, index):
