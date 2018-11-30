@@ -61,17 +61,29 @@ class SimpleGridDataset(BaseDataset):
             longi = transforms.ToTensor()(longi).type(torch.FloatTensor) / 65535
             longi = longi[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
             longi = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(longi)
-            
-        lati = Image.open(os.path.join(self.dir, 'lati', fname))
-        lati = lati.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-        lati = transforms.ToTensor()(lati).type(torch.FloatTensor) / 65535
-        lati = lati[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
-        lati = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(lati)
 
-        if self.opt.longi != 'none':
+        if self.opt.lati == 'monotone':
+            lati = Image.open(os.path.join(self.dir, 'lati', fname))
+            lati = lati.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
+            lati = transforms.ToTensor()(lati).type(torch.FloatTensor) / 65535
+            lati = lati[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
+            lati = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(lati)
+
+        elif self.opt.lati == 'symmetric':
+            lati = Image.open(os.path.join(self.dir, 'slati', fname))
+            lati = lati.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
+            lati = transforms.ToTensor()(lati).type(torch.FloatTensor) / 65535
+            lati = lati[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
+            lati = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(lati)
+
+        if self.opt.longi != 'none' and self.opt.lati != 'none':
             A = torch.cat((topo, land, longi, lati), dim=0)
-        else:
+        elif self.opt.longi == 'none' and self.opt.lati != 'none':
             A = torch.cat((topo, land, lati), dim=0)
+        elif self.opt.longi != 'none' and self.opt.lati == 'none':
+            A = torch.cat((topo, land, longi), dim=0)
+        else:
+            A = torch.cat((topo, land), dim=0)
 
         if self.opt.phase == 'train':
             bm = Image.open(os.path.join(self.dir, 'bm', fname))

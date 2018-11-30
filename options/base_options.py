@@ -46,6 +46,7 @@ class BaseOptions():
         parser.add_argument('--suffix', default='', type=str, help='customized suffix: opt.name = opt.name + suffix: e.g., {model}_{which_model_netG}_size{loadSize}')
         # SimpleGridDataset params:
         parser.add_argument('--topo_filter', type=str, default='none', help='Apply Pillow ImageFilter to elevation data in SimpleGridDataset [none|detail|edge_enhance|edge_enhance_more|sharpen]')
+        parser.add_argument('--lati', type=str, default='symmetric', help='Latitude data in SimpleGridDataset [monotone|symmetric|none]')
         parser.add_argument('--longi', type=str, default='circular', help='Longitude data in SimpleGridDataset [monotone|circular|none]')
         parser.add_argument('--multi_phase_dataset', action='store_true', help="if not specified, SimpleGridDataset won't append \"train\" or \"test\" to dataroot")
         self.initialized = True
