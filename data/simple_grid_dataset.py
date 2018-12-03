@@ -40,7 +40,11 @@ class SimpleGridDataset(BaseDataset):
         elif self.opt.topo_filter == 'sharpen':
             topo = topo.filter(ImageFilter.SHARPEN)
 
-        topo = transforms.ToTensor()(topo)
+        if topo.mode == '1':
+            topo = transforms.ToTensor()(topo)
+        else:
+            topo = transforms.ToTensor()(topo).type(torch.FloatTensor) / 65535
+
         topo = topo[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
         topo = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(topo)
         layers.append(topo)
@@ -48,15 +52,25 @@ class SimpleGridDataset(BaseDataset):
         if self.opt.land_ocean == 'land_mask' or self.opt.land_ocean == 'both':
             land = Image.open(os.path.join(self.dir, 'land', fname))
             land = land.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-            land = transforms.ToTensor()(land)
+
+            if land.mode == '1':
+                land = transforms.ToTensor()(land)
+            else:
+                land = transforms.ToTensor()(land).type(torch.FloatTensor) / 65535
+
             land = land[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
-            land = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(land)
+            land = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(land)              
             layers.append(land)
         
         if self.opt.land_ocean == 'distance_to_ocean' or self.opt.land_ocean == 'both':
             docean = Image.open(os.path.join(self.dir, 'docean', fname))
             docean = docean.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-            docean = transforms.ToTensor()(docean)
+
+            if docean.mode == '1':
+                docean = transforms.ToTensor()(docean)
+            else:
+                docean = transforms.ToTensor()(docean).type(torch.FloatTensor) / 65535
+
             docean = docean[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
             docean = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(docean)
             layers.append(docean)
@@ -64,7 +78,12 @@ class SimpleGridDataset(BaseDataset):
         if self.opt.longi == 'monotone':
             longi = Image.open(os.path.join(self.dir, 'longi', fname))
             longi = longi.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-            longi = transforms.ToTensor()(longi).type(torch.FloatTensor) / 65535
+
+            if longi.mode == '1':
+                longi = transforms.ToTensor()(longi)
+            else:
+                longi = transforms.ToTensor()(longi).type(torch.FloatTensor) / 65535
+
             longi = longi[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
             longi = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(longi)
             layers.append(longi)
@@ -72,7 +91,12 @@ class SimpleGridDataset(BaseDataset):
         elif self.opt.longi == 'circular':
             longi = Image.open(os.path.join(self.dir, 'clongi', fname))
             longi = longi.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-            longi = transforms.ToTensor()(longi).type(torch.FloatTensor) / 65535
+
+            if longi.mode == '1':
+                longi = transforms.ToTensor()(longi)
+            else:
+                longi = transforms.ToTensor()(longi).type(torch.FloatTensor) / 65535
+
             longi = longi[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
             longi = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(longi)
             layers.append(longi)
@@ -80,7 +104,12 @@ class SimpleGridDataset(BaseDataset):
         if self.opt.lati == 'monotone':
             lati = Image.open(os.path.join(self.dir, 'lati', fname))
             lati = lati.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-            lati = transforms.ToTensor()(lati).type(torch.FloatTensor) / 65535
+
+            if lati.mode == '1':
+                lati = transforms.ToTensor()(lati)
+            else:
+                lati = transforms.ToTensor()(lati).type(torch.FloatTensor) / 65535
+
             lati = lati[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
             lati = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(lati)
             layers.append(lati)
@@ -88,7 +117,12 @@ class SimpleGridDataset(BaseDataset):
         elif self.opt.lati == 'symmetric':
             lati = Image.open(os.path.join(self.dir, 'slati', fname))
             lati = lati.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-            lati = transforms.ToTensor()(lati).type(torch.FloatTensor) / 65535
+
+            if lati.mode == '1':
+                lati = transforms.ToTensor()(lati)
+            else:
+                lati = transforms.ToTensor()(lati).type(torch.FloatTensor) / 65535
+
             lati = lati[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
             lati = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(lati)
             layers.append(lati)
@@ -98,7 +132,12 @@ class SimpleGridDataset(BaseDataset):
         if self.opt.phase == 'train':
             bm = Image.open(os.path.join(self.dir, 'bm', fname))
             bm = bm.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
-            bm = transforms.ToTensor()(bm)
+
+            if bm.mode == '1':
+                bm = transforms.ToTensor()(bm)
+            else:
+                bm = transforms.ToTensor()(bm).type(torch.FloatTensor) / 65535
+
             bm = bm[:, h_offset:h_offset + self.opt.fineSize, w_offset:w_offset + self.opt.fineSize]
             bm = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(bm)
             B = bm       
