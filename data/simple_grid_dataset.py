@@ -40,7 +40,7 @@ class SimpleGridDataset(BaseDataset):
         elif self.opt.topo_filter == 'sharpen':
             topo = topo.filter(ImageFilter.SHARPEN)
 
-        if topo.mode == '1':
+        if topo.mode == 'L':
             topo = transforms.ToTensor()(topo)
         else:
             topo = transforms.ToTensor()(topo).type(torch.FloatTensor) / 65535
@@ -53,7 +53,7 @@ class SimpleGridDataset(BaseDataset):
             land = Image.open(os.path.join(self.dir, 'land', fname))
             land = land.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
 
-            if land.mode == '1':
+            if land.mode == 'L':
                 land = transforms.ToTensor()(land)
             else:
                 land = transforms.ToTensor()(land).type(torch.FloatTensor) / 65535
@@ -66,7 +66,7 @@ class SimpleGridDataset(BaseDataset):
             docean = Image.open(os.path.join(self.dir, 'docean', fname))
             docean = docean.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
 
-            if docean.mode == '1':
+            if docean.mode == 'L':
                 docean = transforms.ToTensor()(docean)
             else:
                 docean = transforms.ToTensor()(docean).type(torch.FloatTensor) / 65535
@@ -79,7 +79,7 @@ class SimpleGridDataset(BaseDataset):
             longi = Image.open(os.path.join(self.dir, 'longi', fname))
             longi = longi.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
 
-            if longi.mode == '1':
+            if longi.mode == 'L':
                 longi = transforms.ToTensor()(longi)
             else:
                 longi = transforms.ToTensor()(longi).type(torch.FloatTensor) / 65535
@@ -92,7 +92,7 @@ class SimpleGridDataset(BaseDataset):
             longi = Image.open(os.path.join(self.dir, 'clongi', fname))
             longi = longi.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
 
-            if longi.mode == '1':
+            if longi.mode == 'L':
                 longi = transforms.ToTensor()(longi)
             else:
                 longi = transforms.ToTensor()(longi).type(torch.FloatTensor) / 65535
@@ -105,7 +105,7 @@ class SimpleGridDataset(BaseDataset):
             lati = Image.open(os.path.join(self.dir, 'lati', fname))
             lati = lati.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
 
-            if lati.mode == '1':
+            if lati.mode == 'L':
                 lati = transforms.ToTensor()(lati)
             else:
                 lati = transforms.ToTensor()(lati).type(torch.FloatTensor) / 65535
@@ -118,7 +118,7 @@ class SimpleGridDataset(BaseDataset):
             lati = Image.open(os.path.join(self.dir, 'slati', fname))
             lati = lati.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
 
-            if lati.mode == '1':
+            if lati.mode == 'L':
                 lati = transforms.ToTensor()(lati)
             else:
                 lati = transforms.ToTensor()(lati).type(torch.FloatTensor) / 65535
@@ -133,7 +133,7 @@ class SimpleGridDataset(BaseDataset):
             bm = Image.open(os.path.join(self.dir, 'bm', fname))
             bm = bm.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
 
-            if bm.mode == '1':
+            if bm.mode == 'RGB':
                 bm = transforms.ToTensor()(bm)
             else:
                 bm = transforms.ToTensor()(bm).type(torch.FloatTensor) / 65535

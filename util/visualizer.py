@@ -118,6 +118,10 @@ class Visualizer():
             self.saved = True
             for label, image in visuals.items():
                 image_numpy = util.tensor2im(image)
+                
+                if image_numpy.shape[2] > 3:
+                    image_numpy = image_numpy[:, :, 0]
+
                 img_path = os.path.join(self.img_dir, 'epoch%.3d_%s.png' % (epoch, label))
                 util.save_image(image_numpy, img_path)
             # update website
