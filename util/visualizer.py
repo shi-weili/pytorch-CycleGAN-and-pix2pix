@@ -25,6 +25,10 @@ def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256):
             im = imresize(im, (h, int(w * aspect_ratio)), interp='bicubic')
         if aspect_ratio < 1.0:
             im = imresize(im, (int(h / aspect_ratio), w), interp='bicubic')
+
+        if im.shape[2] > 3:
+            im = im[:, :, 0]
+
         util.save_image(im, save_path)
 
         ims.append(image_name)
