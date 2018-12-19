@@ -3,7 +3,6 @@ from util.image_pool import ImagePool
 from .base_model import BaseModel
 from . import networks
 
-
 class Pix2PixModel(BaseModel):
     def name(self):
         return 'Pix2PixModel'

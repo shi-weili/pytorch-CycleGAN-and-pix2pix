@@ -3,6 +3,7 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
+from . import switchable_norm as sn
 
 ###############################################################################
 # Helper Functions
@@ -14,6 +15,8 @@ def get_norm_layer(norm_type='instance'):
         norm_layer = functools.partial(nn.BatchNorm2d, affine=True)
     elif norm_type == 'instance':
         norm_layer = functools.partial(nn.InstanceNorm2d, affine=False, track_running_stats=True)
+    elif norm_type == 'switchable':
+        norm_layer = functools.partial(sn.SwitchNorm2d)
     elif norm_type == 'none':
         norm_layer = None
     else:
