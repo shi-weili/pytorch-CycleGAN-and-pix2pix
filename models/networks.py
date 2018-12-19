@@ -152,6 +152,7 @@ class ResnetGenerator(nn.Module):
             use_bias = norm_layer.func == nn.InstanceNorm2d
         else:
             use_bias = norm_layer == nn.InstanceNorm2d
+            # Instance normalization also doesn't need bia in conv layer. Ref: https://github.com/shaoanlu/MUNIT-keras/issues/3
 
         model = [nn.ReflectionPad2d(3),
                  nn.Conv2d(input_nc, ngf, kernel_size=7, padding=0,
