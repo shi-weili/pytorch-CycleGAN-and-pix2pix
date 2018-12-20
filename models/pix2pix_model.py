@@ -12,7 +12,7 @@ class Pix2PixModel(BaseModel):
 
         # changing the default values to match the pix2pix paper
         # (https://phillipi.github.io/pix2pix/)
-        parser.set_defaults(pool_size=0, no_lsgan=True, norm='batch')
+        parser.set_defaults(pool_size=0, no_lsgan=True)
         parser.set_defaults(dataset_mode='aligned')
         parser.set_defaults(which_model_netG='unet_256')
         if is_train:
