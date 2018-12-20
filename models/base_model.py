@@ -2,7 +2,7 @@ import os
 import torch
 from collections import OrderedDict
 from . import networks
-
+from . import batch_norm_mod as bnm
 
 class BaseModel():
 
@@ -30,6 +30,15 @@ class BaseModel():
 
     def set_input(self, input):
         self.input = input
+    
+    def set_bnm_use_running_stats_in_training(self, use_running_stats_in_training):
+        for name in self.model_names:
+            if isinstance(name, str):
+                net = getattr(self, 'net' + name)
+                for module in net.model:
+                    if isinstance(module, bnm.BatchNormMod2d):
+                        print('set_bnm_use_running_stats_in_training()')
+                        module.set_use_running_stats_in_training(use_running_stats_in_training)
 
     def forward(self):
         pass
