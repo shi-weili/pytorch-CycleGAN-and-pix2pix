@@ -13,7 +13,7 @@ from . import batch_norm_mod as bnm
 
 def get_norm_layer(norm_type='instance'):
     if norm_type == 'batch':
-        norm_layer = functools.partial(nn.BatchNorm2d, affine=True)
+        norm_layer = functools.partial(nn.BatchNorm2d, affine=True, momentum=0.01)
     elif norm_type == 'batch_mod':
         norm_layer = functools.partial(bnm.BatchNormMod2d)
     elif norm_type == 'instance':
