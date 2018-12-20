@@ -21,7 +21,7 @@ if __name__ == '__main__':
         iter_data_time = time.time()
         epoch_iter = 0
 
-        if epoch < opt.opt.niter:
+        if epoch < opt.niter:
             model.set_bnm_use_running_stats_in_training(False)
         else:
             model.set_bnm_use_running_stats_in_training(True)
