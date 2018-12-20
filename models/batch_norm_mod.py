@@ -51,7 +51,6 @@ class BatchNormMod2d(nn.Module):
             self.running_var.add_((1 - self.momentum) * var_bn.data)
 
             if self.use_running_stats_in_training:
-                print('use_running_stats_in_training = ' + str(self.use_running_stats_in_training))
                 mean_bn = torch.autograd.Variable(self.running_mean)
                 var_bn = torch.autograd.Variable(self.running_var)
         else:

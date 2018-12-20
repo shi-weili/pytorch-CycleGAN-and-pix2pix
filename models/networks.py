@@ -312,7 +312,6 @@ class UnetSkipConnectionBlock(nn.Module):
     def set_bnm_use_running_stats_in_training(self, use_running_stats_in_training):
         for layer in self.model:
             if isinstance(layer, bnm.BatchNormMod2d):
-                print('set_bnm_use_running_stats_in_training()')
                 layer.set_use_running_stats_in_training(use_running_stats_in_training)
             elif isinstance(layer, UnetSkipConnectionBlock):
                 layer.set_bnm_use_running_stats_in_training(use_running_stats_in_training)

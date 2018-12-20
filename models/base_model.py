@@ -32,12 +32,10 @@ class BaseModel():
         self.input = input
     
     def set_bnm_use_running_stats_in_training(self, use_running_stats_in_training):
-        print('base_model.set_bnm_use_running_stats_in_training()')
         for name in self.model_names:
             if isinstance(name, str):
                 net = getattr(self, 'net' + name)
                 if isinstance(net.module.model, networks.UnetSkipConnectionBlock):
-                    print('UnetSkipConnectionBlock')
                     net.module.model.set_bnm_use_running_stats_in_training(use_running_stats_in_training)
 
     def forward(self):
