@@ -22,6 +22,7 @@ if __name__ == '__main__':
         epoch_iter = 0
 
         model.set_bnm_use_running_stats_in_training(True)
+        print("Wut")
 
         for i, data in enumerate(dataset):
             iter_start_time = time.time()
