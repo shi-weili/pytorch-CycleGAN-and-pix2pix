@@ -21,8 +21,10 @@ if __name__ == '__main__':
         iter_data_time = time.time()
         epoch_iter = 0
 
-        model.set_bnm_use_running_stats_in_training(True)
-        print("Wut")
+        if epoch < opt.opt.niter:
+            model.set_bnm_use_running_stats_in_training(False)
+        else:
+            model.set_bnm_use_running_stats_in_training(True)
 
         for i, data in enumerate(dataset):
             iter_start_time = time.time()
