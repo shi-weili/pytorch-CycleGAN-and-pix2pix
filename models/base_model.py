@@ -32,6 +32,7 @@ class BaseModel():
         self.input = input
     
     def set_bnm_use_running_stats_in_training(self, use_running_stats_in_training):
+        print('base_model.set_bnm_use_running_stats_in_training()')
         for name in self.model_names:
             if isinstance(name, str):
                 net = getattr(self, 'net' + name)
