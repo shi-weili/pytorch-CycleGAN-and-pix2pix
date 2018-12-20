@@ -109,6 +109,11 @@ class SwitchNorm2d(nn.Module):
         x = x.view(N, C, -1)
 
         if self.training:
+            print("Switchable norm is in traning mode!")
+        else:
+            print("Switchable norm is in testing mode!")
+
+        if self.training:
             mean_in = x.mean(-1, keepdim=True)
             var_in = x.var(-1, keepdim=True)
 
