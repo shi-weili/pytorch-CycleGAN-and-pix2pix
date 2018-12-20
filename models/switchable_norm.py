@@ -122,6 +122,11 @@ class SwitchNorm2d(nn.Module):
             var_ln = temp.mean(1, keepdim=True) - mean_ln ** 2
 
             if self.using_moving_average:
+                print("self.running_mean_in: " + str(self.running_mean_in.size()))
+                print("self.running_var_in: " + str(self.running_var_in.size()))
+                print("mean_in: " + str(mean_in.size()))
+                print("var_in: " + str(var_in.size()))
+
                 self.running_mean_in.mul_(self.momentum)
                 self.running_mean_in.add_((1 - self.momentum) * mean_in.data)
                 self.running_var_in.mul_(self.momentum)
