@@ -36,7 +36,7 @@ class BaseModel():
         for name in self.model_names:
             if isinstance(name, str):
                 net = getattr(self, 'net' + name)
-                if isinstance(net.module, networks.UnetSkipConnectionBlock):
+                if isinstance(net.module.model, networks.UnetSkipConnectionBlock):
                     print('UnetSkipConnectionBlock')
                     net.module.set_use_running_stats_in_training(use_running_stats_in_training)
 
