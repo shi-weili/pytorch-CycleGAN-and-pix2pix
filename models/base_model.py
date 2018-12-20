@@ -35,10 +35,10 @@ class BaseModel():
         for name in self.model_names:
             if isinstance(name, str):
                 net = getattr(self, 'net' + name)
-                for module in net.model:
-                    if isinstance(module, bnm.BatchNormMod2d):
+                for layer in net.module.model:
+                    if isinstance(layer, bnm.BatchNormMod2d):
                         print('set_bnm_use_running_stats_in_training()')
-                        module.set_use_running_stats_in_training(use_running_stats_in_training)
+                        layer.set_use_running_stats_in_training(use_running_stats_in_training)
 
     def forward(self):
         pass
