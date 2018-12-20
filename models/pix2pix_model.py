@@ -34,13 +34,13 @@ class Pix2PixModel(BaseModel):
             self.model_names = ['G']
         # load/define networks
         self.netG = networks.define_G(opt.input_nc, opt.output_nc, opt.ngf,
-                                      opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type, opt.init_gain, self.gpu_ids)
+                                      opt.which_model_netG, opt.normG, not opt.no_dropout, opt.init_type, opt.init_gain, self.gpu_ids)
 
         if self.isTrain:
             use_sigmoid = opt.no_lsgan
             self.netD = networks.define_D(opt.input_nc + opt.output_nc, opt.ndf,
                                           opt.which_model_netD,
-                                          opt.n_layers_D, opt.norm, use_sigmoid, opt.init_type, opt.init_gain, self.gpu_ids)
+                                          opt.n_layers_D, opt.normD, use_sigmoid, opt.init_type, opt.init_gain, self.gpu_ids)
 
         if self.isTrain:
             self.fake_AB_pool = ImagePool(opt.pool_size)
