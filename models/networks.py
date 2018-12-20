@@ -315,7 +315,7 @@ class UnetSkipConnectionBlock(nn.Module):
                 print('set_bnm_use_running_stats_in_training()')
                 layer.set_use_running_stats_in_training(use_running_stats_in_training)
             elif isinstance(layer, UnetSkipConnectionBlock):
-                layer.set_use_running_stats_in_training(use_running_stats_in_training)
+                layer.set_bnm_use_running_stats_in_training(use_running_stats_in_training)
 
     def forward(self, x):
         if self.outermost:
