@@ -36,7 +36,8 @@ class BaseModel():
             if isinstance(name, str):
                 net = getattr(self, 'net' + name)
                 if isinstance(net.module, networks.UnetSkipConnectionBlock):
-                        net.module.set_use_running_stats_in_training(use_running_stats_in_training)
+                    print('UnetSkipConnectionBlock')
+                    net.module.set_use_running_stats_in_training(use_running_stats_in_training)
 
     def forward(self):
         pass
