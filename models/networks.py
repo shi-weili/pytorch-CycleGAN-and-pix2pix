@@ -20,8 +20,6 @@ def get_norm_layer(norm_type='instance'):
         norm_layer = functools.partial(bnm.BatchNormMod2d)
     elif norm_type == 'instance':
         norm_layer = functools.partial(nn.InstanceNorm2d, affine=False, track_running_stats=True)
-    elif norm_type == 'switchable':
-        norm_layer = functools.partial(sn.SwitchNorm2d)
     elif norm_type == 'none':
         norm_layer = None
     else:
