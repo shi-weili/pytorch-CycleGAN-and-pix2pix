@@ -5,6 +5,7 @@ import functools
 from torch.optim import lr_scheduler
 from . import switchable_norm as sn
 from . import batch_norm_mod as bnm
+from . import batch_renorm as brn
 
 ###############################################################################
 # Helper Functions
@@ -14,6 +15,8 @@ from . import batch_norm_mod as bnm
 def get_norm_layer(norm_type='instance'):
     if norm_type == 'batch':
         norm_layer = functools.partial(nn.BatchNorm2d, affine=True, momentum=0.01)
+    elif norm_type == 'batch_renorm':
+        norm_layer = functools.partial(brn.BatchRenorm2d)
     elif norm_type == 'batch_mod':
         norm_layer = functools.partial(bnm.BatchNormMod2d)
     elif norm_type == 'instance':

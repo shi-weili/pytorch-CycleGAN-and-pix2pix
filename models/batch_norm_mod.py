@@ -3,11 +3,10 @@ import torch.nn as nn
 
 class BatchNormMod2d(nn.Module):
     def __init__(self, num_features, eps=1e-5, momentum=0.99,
-                 last_gamma=False, use_running_stats_in_training=False):
+                 use_running_stats_in_training=False):
         super(BatchNormMod2d, self).__init__()
         self.eps = eps
         self.momentum = momentum
-        self.last_gamma = last_gamma
         self.use_running_stats_in_training = use_running_stats_in_training
         self.weight = nn.Parameter(torch.ones(1, num_features, 1, 1))
         self.bias = nn.Parameter(torch.zeros(1, num_features, 1, 1))
@@ -19,10 +18,7 @@ class BatchNormMod2d(nn.Module):
     def reset_parameters(self):
         self.running_mean.zero_()
         self.running_var.zero_()
-        if self.last_gamma:
-            self.weight.data.fill_(0)
-        else:
-            self.weight.data.fill_(1)
+        self.weight.data.fill_(1)
         self.bias.data.zero_()
 
     def set_use_running_stats_in_training(self, use_running_stats_in_training):
