@@ -3,7 +3,6 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
-from . import switchable_norm as sn
 from . import batch_norm_mod as bnm
 from . import batch_renorm as brn
 
