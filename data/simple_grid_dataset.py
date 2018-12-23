@@ -130,8 +130,12 @@ class SimpleGridDataset(BaseDataset):
         A = torch.cat(layers, dim=0)
 
         if self.opt.phase == 'train':
-            bm = Image.open(os.path.join(self.dir, 'bm', fname))
-            bm = bm.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
+            if self.opt.bm_version == 'bm':
+                bm = Image.open(os.path.join(self.dir, 'bm', fname))
+                bm = bm.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
+            elif self.opt.bm_version == 'bm_land_ocean_ice':
+                bm = Image.open(os.path.join(self.dir, 'bm_land_ocean_ice', fname))
+                bm = bm.resize((self.opt.loadSize, self.opt.loadSize), Image.BICUBIC)
 
             if bm.mode == 'RGB':
                 bm = transforms.ToTensor()(bm)
