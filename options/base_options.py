@@ -47,7 +47,7 @@ class BaseOptions():
         parser.add_argument('--suffix', default='', type=str, help='customized suffix: opt.name = opt.name + suffix: e.g., {model}_{which_model_netG}_size{loadSize}')
         
         # Terra Mars:
-        parser.add_argument('--target', type=str, default='bm_land_ocean', help='Which Blue Marble version to use [bm | bm_land_ocean | bm_land_ocean_ice | night | clouds]')
+        parser.add_argument('--target', type=str, default='bm_land_ocean', help='Which Blue Marble version to use [bm | bm_enhanced | bm_land_ocean | bm_land_ocean_ice | night | clouds]')
         parser.add_argument('--topo_filter', type=str, default='none', help='Apply Pillow ImageFilter to elevation data in SimpleGridDataset [none|detail|edge_enhance|edge_enhance_more|sharpen]')
         parser.add_argument('--land_ocean', type=str, default='land_mask', help='Land ocean data in SimpleGridDataset [land_mask|distance_to_ocean|both|none]')
         parser.add_argument('--lati', type=str, default='monotone', help='Latitude data in SimpleGridDataset [monotone|symmetric|none]')
